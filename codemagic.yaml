@@ -5,10 +5,6 @@ workflows:
     instance_type: mac_mini_m1
     working_directory: mobile
     environment:
-      android_signing:
-        - keystore_reference
-      groups:
-        - google_play
       vars:
         PACKAGE_NAME: "com.silentzoneapp"
       node: 18
