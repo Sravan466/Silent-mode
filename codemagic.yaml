@@ -1,35 +1,18 @@
 workflows:
-  react-native-android:
-    name: React Native Android
-    max_build_duration: 120
-    instance_type: mac_mini_m1
-    working_directory: mobile
+  android-workflow:
+    name: Android Workflow
+    max_build_duration: 60
     environment:
-      vars:
-        PACKAGE_NAME: "com.silentzoneapp"
       node: 18
     scripts:
-      - name: Install npm dependencies
+      - name: Install dependencies
         script: |
+          cd mobile
           npm install
-      - name: Generate keystore
+      - name: Build Android APK
         script: |
-          cd android/app
-          keytool -genkeypair -v -storetype PKCS12 -keystore my-upload-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000 -storepass silentzone -keypass silentzone -dname "CN=Silent Zone"
-      - name: Set Android SDK location
-        script: |
-          echo "sdk.dir=$ANDROID_SDK_ROOT" > android/local.properties
-      - name: Build Android release
-        script: |
-          cd android
-          ./gradlew assembleRelease
+          cd mobile/android
+          chmod +x gradlew
+          ./gradlew assembleDebug
     artifacts:
       - mobile/android/app/build/outputs/**/*.apk
-      - mobile/android/app/build/outputs/**/mapping.txt
-    publishing:
-      email:
-        recipients:
-          - user@example.com
-        notify:
-          success: true
-          failure: false
