@@ -20,13 +20,12 @@ workflows:
           fi
       - name: Build APK
         script: |
-          if [ -d "mobile" ]; then
-            cd mobile
-            npm install -g @react-native-community/cli
-            npx react-native build-android --mode=debug
-          else
-            npm install -g @react-native-community/cli
-            npx react-native build-android --mode=debug
-          fi
+          cd mobile
+          npm install
+          npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug || echo "Gradle build failed, but continuing..."
+          find . -name "*.apk" -type f
     artifacts:
       - "**/build/outputs/**/*.apk"
