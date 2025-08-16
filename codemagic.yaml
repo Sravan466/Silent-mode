@@ -6,18 +6,31 @@ workflows:
       node: 18
       java: 17
     scripts:
+      - name: List directory structure
+        script: |
+          ls -la
+          find . -name "gradlew" -type f
       - name: Install dependencies
         script: |
-          cd mobile
-          npm install
-          npm install -g @react-native-community/cli
-      - name: Create local.properties
-        script: |
-          cd mobile/android
-          echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+          if [ -d "mobile" ]; then
+            cd mobile
+            npm install
+          else
+            npm install
+          fi
       - name: Build APK
         script: |
-          cd mobile/android
-          ./gradlew assembleDebug
+          if [ -f "mobile/android/gradlew" ]; then
+            cd mobile/android
+            chmod +x gradlew
+            ./gradlew assembleDebug
+          elif [ -f "android/gradlew" ]; then
+            cd android
+            chmod +x gradlew
+            ./gradlew assembleDebug
+          else
+            echo "gradlew not found"
+            exit 1
+          fi
     artifacts:
-      - mobile/android/app/build/outputs/**/*.apk
+      - "**/build/outputs/**/*.apk"
