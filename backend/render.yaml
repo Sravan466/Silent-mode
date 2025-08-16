@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: silent-zone-backend
+    env: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: MONGODB_URI
+        value: mongodb+srv://sravan:sravan46612@cluster0.z5pdbmy.mongodb.net/silentzone?retryWrites=true&w=majority&appName=Cluster0
+      - key: JWT_SECRET
+        value: your_jwt_secret_key_here_change_in_production
