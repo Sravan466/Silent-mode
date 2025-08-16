@@ -1,17 +1,23 @@
 workflows:
-  android-workflow:
-    name: Android Workflow
+  react-native-android:
+    name: React Native Android
     max_build_duration: 60
     environment:
       node: 18
+      java: 17
     scripts:
       - name: Install dependencies
         script: |
           cd mobile
           npm install
-      - name: Build Android APK
+          npm install -g @react-native-community/cli
+      - name: Create local.properties
         script: |
-          cd mobile
-          npx react-native build-android --mode=debug
+          cd mobile/android
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+      - name: Build APK
+        script: |
+          cd mobile/android
+          ./gradlew assembleDebug
     artifacts:
       - mobile/android/app/build/outputs/**/*.apk
