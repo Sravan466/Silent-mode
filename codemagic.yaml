@@ -20,17 +20,13 @@ workflows:
           fi
       - name: Build APK
         script: |
-          if [ -f "mobile/android/gradlew" ]; then
-            cd mobile/android
-            chmod +x gradlew
-            ./gradlew assembleDebug
-          elif [ -f "android/gradlew" ]; then
-            cd android
-            chmod +x gradlew
-            ./gradlew assembleDebug
+          if [ -d "mobile" ]; then
+            cd mobile
+            npm install -g @react-native-community/cli
+            npx react-native build-android --mode=debug
           else
-            echo "gradlew not found"
-            exit 1
+            npm install -g @react-native-community/cli
+            npx react-native build-android --mode=debug
           fi
     artifacts:
       - "**/build/outputs/**/*.apk"
