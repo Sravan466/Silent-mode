@@ -11,8 +11,7 @@ workflows:
           npm install
       - name: Build Android APK
         script: |
-          cd mobile/android
-          chmod +x gradlew
-          ./gradlew assembleDebug
+          cd mobile
+          npx react-native build-android --mode=debug
     artifacts:
       - mobile/android/app/build/outputs/**/*.apk
