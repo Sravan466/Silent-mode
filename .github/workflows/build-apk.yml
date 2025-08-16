@@ -37,16 +37,16 @@ jobs:
         cd mobile
         mkdir -p android/app/src/main/assets
 
-    - name: Bundle JavaScript
+    - name: Create local.properties
       run: |
-        cd mobile
-        npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle
+        cd mobile/android
+        echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
 
     - name: Build APK
       run: |
         cd mobile/android
         chmod +x gradlew
-        ./gradlew assembleDebug
+        ./gradlew assembleDebug --no-daemon --stacktrace
 
     - name: Upload APK
       uses: actions/upload-artifact@v3
